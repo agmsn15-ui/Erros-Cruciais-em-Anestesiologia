@@ -1,0 +1,224 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.wrap { padding: 1rem 0; }
+h1 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 18px; }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab {
+  padding: 5px 12px; border-radius: var(--border-radius-md);
+  font-size: 12px; font-weight: 500; cursor: pointer; border: none;
+  background: var(--color-background-secondary);
+  color: var(--color-text-secondary); transition: all .15s;
+}
+.tab:hover { color: var(--color-text-primary); }
+.tab.active { color: #fff; }
+.t0.active { background: #185FA5; }
+.t1.active { background: #993C1D; }
+.t2.active { background: #3B6D11; }
+.t3.active { background: #854F0B; }
+.t4.active { background: #533AB7; }
+.t5.active { background: #0F6E56; }
+.t6.active { background: #993556; }
+.t7.active { background: #5F5E5A; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.error-list { display: flex; flex-direction: column; gap: 6px; }
+
+.eitem {
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border-tertiary);
+  background: var(--color-background-secondary);
+  padding: 10px 13px;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.eitem:hover { border-color: var(--color-border-secondary); }
+
+.eitem-header { display: flex; align-items: flex-start; gap: 10px; }
+.badge {
+  font-size: 10px; font-weight: 500; padding: 2px 7px;
+  border-radius: 20px; flex-shrink: 0; margin-top: 2px;
+}
+.b0 { background: #B5D4F4; color: #042C53; }
+.b1 { background: #F5C4B3; color: #4A1B0C; }
+.b2 { background: #C0DD97; color: #173404; }
+.b3 { background: #FAC775; color: #412402; }
+.b4 { background: #CECBF6; color: #26215C; }
+.b5 { background: #9FE1CB; color: #04342C; }
+.b6 { background: #F4C0D1; color: #4B1528; }
+.b7 { background: #D3D1C7; color: #2C2C2A; }
+
+.eitem-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.45; flex: 1; }
+.eitem-body { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--color-border-tertiary); font-size: 12px; color: var(--color-text-secondary); line-height: 1.65; }
+.eitem.open .eitem-body { display: block; }
+
+.severity {
+  display: inline-block; font-size: 10px; font-weight: 500;
+  padding: 1px 7px; border-radius: 20px; margin-left: 6px; vertical-align: middle;
+}
+.fatal { background: #F7C1C1; color: #501313; }
+.grave { background: #FAEEDA; color: #412402; }
+.mod   { background: #EAF3DE; color: #173404; }
+
+.cat-count { font-size: 11px; color: var(--color-text-tertiary); margin-left: 4px; }
+</style>
+
+<div class="wrap">
+  <h1>Erros Cruciais em Anestesiologia — Taxonomia Expandida</h1>
+  <p class="subtitle">8 categorias · clique em qualquer erro para ver o mecanismo resumido</p>
+
+  <div class="tabs">
+    <button class="tab t0 active" onclick="show(0,this)">Via Aérea<span class="cat-count">(9)</span></button>
+    <button class="tab t1" onclick="show(1,this)">Medicamentos<span class="cat-count">(11)</span></button>
+    <button class="tab t2" onclick="show(2,this)">Procedimentos<span class="cat-count">(10)</span></button>
+    <button class="tab t3" onclick="show(3,this)">Equipamentos<span class="cat-count">(8)</span></button>
+    <button class="tab t4" onclick="show(4,this)">Neuroeixo<span class="cat-count">(7)</span></button>
+    <button class="tab t5" onclick="show(5,this)">Monitorização<span class="cat-count">(6)</span></button>
+    <button class="tab t6" onclick="show(6,this)">Populações Especiais<span class="cat-count">(8)</span></button>
+    <button class="tab t7" onclick="show(7,this)">Transição de Cuidado<span class="cat-count">(6)</span></button>
+  </div>
+
+  <div id="p0" class="panel active">
+    <div class="error-list" id="l0"></div>
+  </div>
+  <div id="p1" class="panel">
+    <div class="error-list" id="l1"></div>
+  </div>
+  <div id="p2" class="panel">
+    <div class="error-list" id="l2"></div>
+  </div>
+  <div id="p3" class="panel">
+    <div class="error-list" id="l3"></div>
+  </div>
+  <div id="p4" class="panel">
+    <div class="error-list" id="l4"></div>
+  </div>
+  <div id="p5" class="panel">
+    <div class="error-list" id="l5"></div>
+  </div>
+  <div id="p6" class="panel">
+    <div class="error-list" id="l6"></div>
+  </div>
+  <div id="p7" class="panel">
+    <div class="error-list" id="l7"></div>
+  </div>
+</div>
+
+<script>
+const data = [
+  // 0 — VIA AÉREA
+  { cat:0, sev:"fatal", title:"Passy-Muir + balão insuflado em VMI", body:"Válvula unidirecional impede expiração → aprisionamento aéreo progressivo → pneumotórax hipertensivo e colapso cardiovascular. Remover sempre antes de conectar ao ventilador." },
+  { cat:0, sev:"fatal", title:"Extubação acidental em decúbito ventral", body:"Reintubação impossível na posição. Rotação para supino consome 60–90 s de apneia. Verificação mandatória da fixação e profundidade do tubo pós-posicionamento." },
+  { cat:0, sev:"fatal", title:"Pré-oxigenação insuficiente antes de via aérea difícil", body:"CRF substituída por O₂ insuficientemente → janela de apneia segura reduzida. Critério: FeO₂ ≥ 0,9. Obesos e gestantes dessaturam em < 3 min." },
+  { cat:0, sev:"fatal", title:"Intubação esofágica não reconhecida", body:"Ausência de capnografia confirmando ETCO₂ é o erro. Ausculta pulmonar é insuficiente. Toda intubação exige confirmação por capnografia de forma de onda." },
+  { cat:0, sev:"fatal", title:"Cilindro de O₂ de reserva aberto mascarando falha da tubulação central", body:"Falha silenciosa detectada só quando o cilindro esgota. Fechar o cilindro após verificação da carga é etapa obrigatória do checklist pré-anestésico." },
+  { cat:0, sev:"grave", title:"Extubação acidental durante transporte", body:"Paciente sedado/relaxado sem via aérea definitiva fora da sala. Checar fixação antes de qualquer movimentação. Manter equipamento de via aérea de emergência no transporte." },
+  { cat:0, sev:"grave", title:"Falha em reconhecer intubação endobrônquica", body:"Tubo avança para brônquio principal direito → hipoxemia + hiperinssuflação do pulmão ventilado. Verificar simetria da ausculta e curvas de fluxo/volume após posicionamento." },
+  { cat:0, sev:"grave", title:"Não reconhecer via aérea difícil não antecipada e não ter plano B", body:"Ausência de dispositivo supraglótico de resgate (LMA) ou set de cricotireoidotomia na sala quando intubação falha. Todo caso deve ter plano B e plano C explícitos antes da indução." },
+  { cat:0, sev:"grave", title:"Quantidade insuficiente de O₂ no cilindro de transporte", body:"Cilindro E com 500 psi fornece apenas ~15 min a 2 L/min. Calcular consumo previsto para o transporte e considerar margem de segurança ampla." },
+
+  // 1 — MEDICAMENTOS
+  { cat:1, sev:"fatal", title:"Potássio IV não diluído em bolus", body:"KCl puro (1 mEq/mL) → hiperpotassemia imediata → FV/assistolia. Medicamento de alto alerta ISMP. Armazenar separado, sempre diluir, taxa máx 20 mEq/h periférico." },
+  { cat:1, sev:"fatal", title:"Succinilcolina em miopatia/queimado/desnervado", body:"Upregulation de RACh → saída maciça de K⁺ → hiperpotassemia e parada cardíaca. Risco latente em imobilizados > 72h, lesão medular > 48h, Duchenne/Becker." },
+  { cat:1, sev:"fatal", title:"Succinilcolina como gatilho de Hipertermia Maligna", body:"Em portadores de mutação RYR1 → liberação descontrolada de Ca²⁺ → hipermetabolismo. Dantroleno 2,5 mg/kg IV imediato. Sempre questionar história familiar." },
+  { cat:1, sev:"fatal", title:"Fenitoína IV rápida não diluída", body:"Propileno glicol + bloqueio de Na⁺ cardíaco → bradicardia, BAV, hipotensão refratária. Máx 50 mg/min, diluída em SF, com ECG contínuo." },
+  { cat:1, sev:"fatal", title:"Neostigmina sem antimuscarínico", body:"Ativação M₂ cardíaca → bradicardia severa/assistolia. Glicopirrolato 0,2 mg por 1 mg de neostigmina. Administrar juntos, não sequencialmente." },
+  { cat:1, sev:"fatal", title:"Hemotransfusão ABO incompatível", body:"Hemólise intravascular → CID → FMO. No anestesiado: hemoglobinúria e sangramento difuso são os primeiros sinais. Dupla checagem é prevenção única eficaz." },
+  { cat:1, sev:"grave", title:"Vasoconstritor peridural/intratecal em dose espinal (troca de seringa)", body:"Adrenalina/noradrenalina intratecal acidental → vasoespasmo medular → isquemia. Identificação clara e definitiva das seringas é essencial." },
+  { cat:1, sev:"grave", title:"Confusão entre vecurônio e efedrina (ampolas de aparência similar)", body:"Bloqueio neuromuscular não intencional → apneia em paciente acordado ou sem via aérea assegurada. Causa clássica descrita em múltiplos relatos de eventos sentinela." },
+  { cat:1, sev:"grave", title:"Administração de oxitocina em bolus rápido", body:"Vasodilatação sistêmica intensa + taquicardia reflexa → colapso hemodinâmico, especialmente em cardiopatas. Protocolo: infusão lenta 3–5 UI em 5–10 min mínimo." },
+  { cat:1, sev:"grave", title:"Protamina em paciente com alergia/exposição prévia à insulina NPH", body:"IgE anti-protamina → anafilaxia grave. Verificar história de diabetes em uso de NPH, vasectomia, alergia a peixe. Ter adrenalina pronta." },
+  { cat:1, sev:"grave", title:"Dose excessiva de anestésico local intratecal por confusão de concentração", body:"Bupivacaína 0,75% hiperbárica vs 0,5% → raquianestesia total, parada respiratória e colapso cardiovascular. Checar concentração e volume antes de injetar." },
+
+  // 2 — PROCEDIMENTOS
+  { cat:2, sev:"fatal", title:"Pneumotórax hipertensivo iatrogênico não reconhecido", body:"Pós-punção de subclávia/jugular ou bloqueio supraclavicular. Diagnóstico clínico imediato (ausência de MV + hipotensão + jugulares). Não esperar Rx. Agulha 14G no 2º EIC." },
+  { cat:2, sev:"fatal", title:"Injeção intravascular de anestésico local (LAST)", body:"Convulsão → colapso cardiovascular (bupivacaína: FV refratária). Emulsão lipídica 20% (Intralipid) 1,5 mL/kg em bolus. Deve estar disponível em todo local de bloqueio." },
+  { cat:2, sev:"fatal", title:"Embolia gasosa por CVC: inserção ou retirada", body:"Gradiente negativo ao abrir o sistema → ar entra pela bainha venosa. Posição de Trendelenburg + Valsalva ao retirar. Ocluir imediatamente qualquer abertura do sistema." },
+  { cat:2, sev:"fatal", title:"Embolia gasosa por bolsa IV pressurizada com ar residual", body:"Bolsas pressurizadas com coluna de ar injetam bolus gasoso direto na veia. Purgar completamente o equipo e a bolsa antes de pressurizar." },
+  { cat:2, sev:"fatal", title:"Dreno de ventriculostomia conectado a bolsa pressurizada", body:"Infusão de SF no sistema ventricular → PIC aguda → herniação cerebral. Conectores ISO 80369 previnem a troca. Verificação visual obrigatória de cada linha." },
+  { cat:2, sev:"grave", title:"Torniquete de acesso venoso esquecido no paciente anestesiado", body:"Isquemia silenciosa → necrose muscular e lesão nervosa irreversível. O paciente não comunica dor. Checagem ativa dos membros durante o caso." },
+  { cat:2, sev:"grave", title:"Punção arterial não reconhecida durante tentativa de CVC", body:"Sangue pulsátil pode não ser óbvio em hipotensão. Dilatação acidental da artéria carótida/subclávia → AVC hemorrágico ou hematoma compressivo. Confirmar com manometria ou USG antes de dilatar." },
+  { cat:2, sev:"grave", title:"Posicionamento inadequado com lesão de plexo braquial", body:"Tração por abdução excessiva do braço (> 90°) ou compressão por apoio mal posicionado. Lesão permanente possível. Verificar posição e registrar antes de cobrir com campos." },
+  { cat:2, sev:"grave", title:"Lesão de córnea por ressecamento ocular intraoperatório", body:"Reflexo palpebral abolido pela anestesia + olhos abertos → ceratite de exposição e abrasão corneana. Oclusão com fita adesiva e lubrificante ocular em todo caso ≥ 30 min." },
+  { cat:2, sev:"grave", title:"Retenção de agulha/fragmento de cateter no espaço peridural/intratecal", body:"Fratura de agulha de Tuohy ou cateter ao tentar retirar contra a bisel → corpo estranho no neuroeixo. Nunca retirar cateter com agulha no lugar sem remover o conjunto." },
+
+  // 3 — EQUIPAMENTOS
+  { cat:3, sev:"fatal", title:"Circuito de anestesia desconectado sem alarme audível ativo", body:"Paciente em apneia com ventilador funcionando mas sem gás chegando ao paciente. Alarme de desconexão DEVE estar ativo e audível. A capnografia plana é o sinal." },
+  { cat:3, sev:"fatal", title:"Vaporizador incorreto ou mal montado com agente errado", body:"Sevoflurano em vaporizador de isoflurano → concentração imprecisa, possível superdosagem ou subdosagem com despertar intraoperatório. Checar identificação do vaporizador no início do turno." },
+  { cat:3, sev:"fatal", title:"Conexão cruzada de gases (O₂ conectado ao N₂O e vice-versa)", body:"Possível em conexões danificadas ou fora do padrão DISS. Instalação sempre verificada por engenharia clínica. Durante uso: analisador de gás inspirado obrigatório." },
+  { cat:3, sev:"grave", title:"Falha do fluxômetro com entrega de mistura hipóxica", body:"Válvula de N₂O travada aberta e O₂ fechada → FiO₂ < 0,21. Analisador de O₂ inspirado é a única salvaguarda confiável quando o sistema de proporcionalidade falha." },
+  { cat:3, sev:"grave", title:"Cal sodada esgotada com reinalação de CO₂", body:"Absolvedor saturado → CO₂ se acumula no circuito → hipercapnia progressiva → acidose, hipertensão, arritmias. Checar cor do indicador e resistência à ventilação manual." },
+  { cat:3, sev:"grave", title:"Válvula APL (pop-off) fechada durante ventilação manual espontânea", body:"Pressão crescente no circuito → barotrauma + colapso cardiovascular por transmissão da pressão intratorácica. Erro clássico ao retornar de ventilação controlada para manual." },
+  { cat:3, sev:"grave", title:"Mau funcionamento da válvula unidirecional inspiratória/expiratória", body:"Reinalação de gás expirado não depurado → hipercapnia. Ou resistência expiratória elevada → auto-PEEP. Testar manualmente no checklist." },
+  { cat:3, sev:"mod",   title:"Monitor de pressão de vias aéreas sem limite de alarme de alta pressão", body:"Barotrauma silencioso em paciente com complacência reduzida. Definir limite de pico em 35 cmH₂O como padrão e verificar antes de iniciar VMI." },
+
+  // 4 — NEUROEIXO
+  { cat:4, sev:"fatal", title:"Raquianestesia total (alta espinhal não intencional)", body:"Dose intratecal de peridural → colapso cardiovascular + apneia. Sequência: hipotensão → bradicardia → parada. Posição supina imediata, vasopressor, intubação urgente." },
+  { cat:4, sev:"fatal", title:"Hematoma peridural/espinhal em coagulopata não reconhecido", body:"Parestesia + fraqueza pós-bloqueio em anticoagulado → RM urgência → laminectomia em < 8h. Atraso = paraplegia permanente. Seguir intervalos ASRA 2022." },
+  { cat:4, sev:"fatal", title:"Injeção intravascular de anestésico local peridural em dose peridural", body:"Volume e concentração peridurais são letais se intravasculares. Dose teste obrigatória (adrenalina 15 μg). Injeção fracionada, aspiração antes de cada bolus." },
+  { cat:4, sev:"grave", title:"Abscesso epidural por contaminação durante procedimento", body:"Técnica asséptica rigorosa (máscara + campos + antissepsia com clorexidina alcoólica). Fever + dor lombar + déficit neurológico pós-bloqueio = emergência neurocirúrgica." },
+  { cat:4, sev:"grave", title:"Subdural não intencional com extensão cranial do bloqueio", body:"Cateter no espaço subdural → bloqueio assimétrico extenso, lento, com comprometimento craniano. Comportamento atípico de qualquer bloqueio exige avaliação imediata." },
+  { cat:4, sev:"grave", title:"Injeção intratecal de clorexidina (arrastada do campo asséptico)", body:"Neurotoxicidade direta → aracnoidite, paraplegia permanente. Usar apenas solução aquosa de iodopovidona ou clorexidina aquosa; nunca alcoólica intratecal. Aguardar secagem completa." },
+  { cat:4, sev:"mod",   title:"Cefaleia pós-punção dural não tratada → hematoma subdural intracraniano", body:"CPPD severa não tratada → tração das veias-ponte → hematoma subdural intracraniano. Blood patch não postergado em casos graves é proteção." },
+
+  // 5 — MONITORIZAÇÃO
+  { cat:5, sev:"fatal", title:"Capnografia desligada ou não conectada após intubação", body:"Intubação esofágica não detectada → hipoxemia fatal. Capnografia de forma de onda é padrão mínimo para qualquer anestesia com via aérea artificial (ASA Basic Standards)." },
+  { cat:5, sev:"fatal", title:"Alarmes silenciados ou com limites irreais", body:"Cultura de silenciar alarmes frequentes → alarme real ignorado. Definir limites clinicamente significativos, não apenas aqueles que param o barulho." },
+  { cat:5, sev:"grave", title:"Pressão não invasiva com intervalo longo em paciente instável", body:"PANI a cada 10 min pode perder colapso hemodinâmico entre medidas. Em casos de risco, linha arterial ou PANI a cada 1–2 min durante períodos críticos." },
+  { cat:5, sev:"grave", title:"Oxímetro de pulso em má perfusão periférica interpretado como confiável", body:"Baixa perfusão, vasoconstricção, anemia severa → SpO₂ falsamente normal ou irrelevante. Co-oximetria ou gasometria arterial para confirmação em estados de choque." },
+  { cat:5, sev:"grave", title:"Temperatura não monitorizada em casos longos ou pediátricos", body:"Hipotermia severa → coagulopatia, arritmias, despertar lento. Hipertermia maligna pode elevar temperatura antes de outros sinais. Monitorização contínua obrigatória > 30 min." },
+  { cat:5, sev:"mod",   title:"Profundidade anestésica não monitorizada com risco de despertar", body:"Despertar intraoperatório: incidência 1–2:1000, mais alta em cardíaco, obstétrico, politraumatizado. BIS/índice de entropia como adjunto em casos de alto risco." },
+
+  // 6 — POPULAÇÕES ESPECIAIS
+  { cat:6, sev:"fatal", title:"Dose de anestésico sem ajuste em neonato/lactente", body:"Rim e fígado imaturos → meia-vida prolongada de praticamente todos os fármacos. Opioides em neonatos → apneia prolongada. Calcular SEMPRE pelo peso real e ajustar por idade gestacional corrigida." },
+  { cat:6, sev:"fatal", title:"Indução em sequência rápida inadequada na gestante a termo", body:"Esvaziamento gástrico retardado + pressão do útero → risco de broncoaspiração independente do jejum. ISR obrigatória acima de 18–20 semanas. Prescindir de máscara com pressão cricoide técnica correta." },
+  { cat:6, sev:"fatal", title:"Hipotensão materna não tratada em anestesia subaracnóidea para cesárea", body:"Hipotensão → hipoperfusão uteroplacentária → sofrimento fetal. Fenilefrina é vasopressor de escolha (mantém RVS sem bradicardia fetal). Tratar proativamente, não reativamente." },
+  { cat:6, sev:"grave", title:"Laringoespasmo pediátrico na extubação em plano superficial", body:"Criança com via aérea hiperreativa + secreção/sangue → laringoespasmo total → hipoxemia rapidamente fatal. Extubar profundo OU completamente desperto. Propofol 0,8 mg/kg e succinilcolina 2 mg/kg de resgate." },
+  { cat:6, sev:"grave", title:"Cálculo de dose por peso em obeso sem ajuste (peso total vs IBW)", body:"Succinilcolina: peso total. Propofol manutenção: peso magro. Rocurônio: peso magro. Confundir os parâmetros → superdosagem (propofol) ou bloqueio insuficiente (rocurônio)." },
+  { cat:6, sev:"grave", title:"Não reconhecer alergia ao látex em paciente de alto risco", body:"Espinha bífida, procedimentos urológicos múltiplos, profissionais de saúde → sensibilização. Anafilaxia intraoperatória 30–70 min após exposição. Ambiente látex-safe obrigatório." },
+  { cat:6, sev:"grave", title:"Uso de halogenados em portador de porfiria aguda", body:"Halogenados podem precipitar crise de porfiria aguda. Propofol é o agente de indução seguro. Consultar banco de dados NAPOS para segurança de cada fármaco." },
+  { cat:6, sev:"mod",   title:"Hipoglicemia não monitorizada em diabético em jejum prolongado", body:"Insulinização sem aporte calórico + jejum pré-operatório → hipoglicemia grave no paciente sedado. Checar glicemia na indução e a cada 1–2h em diabéticos em uso de insulina." },
+
+  // 7 — TRANSIÇÃO DE CUIDADO
+  { cat:7, sev:"fatal", title:"Passagem de plantão sem comunicação de instabilidade em curso", body:"Handoff inadequado → novo anestesiologista sem contexto de sangramento, arritmia ou hipotensão em tratamento. Usar protocolo SBAR (Situação, Background, Avaliação, Recomendação)." },
+  { cat:7, sev:"grave", title:"Extubação precoce na SRPA em paciente com bloqueio residual", body:"TOF ratio < 0,9 → fraqueza faríngea → obstrução + broncoaspiração. Nunca extubar por critério subjetivo isolado. TOF quantitativo antes de extubar." },
+  { cat:7, sev:"grave", title:"Alta da SRPA sem critérios (Aldrete < 9) para evitar lotação", body:"Pressão de fluxo → paciente instável vai para enfermaria sem capacidade de monitorização adequada → deterioração não detectada." },
+  { cat:7, sev:"grave", title:"Transferência para UTI sem passagem verbal detalhada ao intensivista", body:"Informações sobre alergias, dificuldade de via aérea, sangramento intraoperatório e medicamentos em curso se perdem. Registrar E verbalizar — os dois." },
+  { cat:7, sev:"grave", title:"Prescrição pós-operatória sem considerar tolerância a opioides pré-op", body:"Paciente em uso crônico de opioides recebe dose padrão → dor severa não controlada ou síndrome de abstinência. Anamnese pré-op sempre inclui uso de analgésicos crônicos." },
+  { cat:7, sev:"mod",   title:"Não comunicar via aérea difícil encontrada ao paciente e ao prontuário", body:"Próxima intubação eletiva ou de emergência tentada sem preparo → catástrofe repetida. Registro obrigatório + pulseira de identificação de via aérea difícil (protocolo SBA/DAS)." },
+];
+
+const bClass = ["b0","b1","b2","b3","b4","b5","b6","b7"];
+const catLabel = ["VA","Rx","Px","Eq","NX","Mon","Pop","TC"];
+
+function renderCat(cat) {
+  const list = document.getElementById("l"+cat);
+  list.innerHTML = "";
+  data.filter(d => d.cat === cat).forEach((d,i) => {
+    const div = document.createElement("div");
+    div.className = "eitem";
+    const sevLabel = d.sev === "fatal" ? "fatal" : d.sev === "grave" ? "grave" : "moderado";
+    div.innerHTML = `
+      <div class="eitem-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="badge ${bClass[cat]}">${catLabel[cat]}</span>
+        <span class="eitem-title">${d.title}<span class="severity ${d.sev}">${sevLabel}</span></span>
+      </div>
+      <div class="eitem-body">${d.body}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function show(id, btn) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("p"+id).classList.add("active");
+  btn.classList.add("active");
+}
+
+for(let i=0;i<8;i++) renderCat(i);
+</script>
